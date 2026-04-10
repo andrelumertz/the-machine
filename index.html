@@ -35,8 +35,8 @@
             font-family: 'Barlow', serif;
         }
         .logo img {
-            height: 50px; 
-            width: auto; 
+            height: 50px;
+            width: auto;
         }
         .nav-links {
             display: flex;
@@ -51,25 +51,23 @@
         .nav-links a:hover {
             color: #8c774c;
         }
-                /* Anúncio */
-                .announcement-bar {
-            background-color: #6f4e37; 
-            color: white; 
+        /* Anúncio */
+        .announcement-bar {
+            background-color: #6f4e37;
+            color: white;
             text-align: center;
             padding: 10px 0;
             font-size: 1.1rem;
             position: fixed;
-            top: 80px; 
+            top: 80px;
             width: 100%;
-            z-index: 999; 
+            z-index: 999;
             font-family: 'Barlow', serif;
         }
-        .announcement-bar p {
-            margin: 0;
-        }
+        .announcement-bar p { margin: 0; }
         .announcement-bar strong {
             font-weight: bold;
-            color: #f5ebe0; 
+            color: #f5ebe0;
         }
         /* Hero Section */
         .hero {
@@ -121,17 +119,13 @@
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
             transition: transform 0.3s;
         }
-        .product-card:hover {
-            transform: translateY(-5px);
-        }
+        .product-card:hover { transform: translateY(-5px); }
         .product-image {
             height: 200px;
             background-size: cover;
             background-position: center;
         }
-        .product-info {
-            padding: 1.5rem;
-        }
+        .product-info { padding: 1.5rem; }
         .product-info h3 {
             margin-bottom: 0.5rem;
             color: #8c774c;
@@ -165,9 +159,7 @@
             margin-bottom: 1rem;
             font-size: 1.2rem;
         }
-        .footer-section p {
-            margin-bottom: 0.5rem;
-        }
+        .footer-section p { margin-bottom: 0.5rem; }
         .social-links {
             display: flex;
             gap: 1rem;
@@ -186,32 +178,206 @@
             border-radius: 5px;
             transition: background-color 0.3s;
         }
-        .btn:hover {
-            background-color: #455745 ;
+        .btn:hover { background-color: #455745; }
+
+        /* ========== CHATBOT FLUTUANTE ========== */
+
+        /* Botão flutuante */
+        .chat-fab {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 56px;
+            height: 56px;
+            background: #0e0e0e;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255,255,255,0.04);
+            transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
         }
-        /* Chatbot Section */
-        .chatbot-section {
-            padding: 5rem 2rem;
-            background-color: #f5ebe0;
+        .chat-fab:hover {
+            transform: scale(1.08);
+            background: #1a1a1a;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255,255,255,0.08);
         }
-        .chatbot-section h2 {
-            font-family: 'Playfair Display', serif;
-            text-align: center;
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-            color: #373a3a;
+        .chat-fab svg {
+            width: 22px;
+            height: 22px;
+            color: #e8e8e8;
+            transition: opacity 0.2s ease;
         }
-        .chatbot-section p {
-            text-align: center;
-            margin-bottom: 2rem;
-            color: #666;
+        .chat-fab .icon-close {
+            display: none;
         }
-        .chatbot-container {
-            max-width: 800px;
-            margin: 0 auto;
-            border-radius: 10px;
+        .chat-fab.open .icon-chat {
+            display: none;
+        }
+        .chat-fab.open .icon-close {
+            display: block;
+        }
+
+        /* Tooltip */
+        .chat-fab::before {
+            content: 'Assistente Serenatto';
+            position: absolute;
+            right: calc(100% + 12px);
+            background: #0e0e0e;
+            color: #e8e8e8;
+            font-family: 'Barlow', sans-serif;
+            font-size: 0.75rem;
+            font-weight: 500;
+            letter-spacing: 0.03em;
+            padding: 6px 12px;
+            border-radius: 6px;
+            white-space: nowrap;
+            border: 1px solid rgba(255,255,255,0.08);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s ease;
+        }
+        .chat-fab:hover::before {
+            opacity: 1;
+        }
+
+        /* Overlay */
+        .chat-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+            z-index: 9990;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        .chat-overlay.visible {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        /* Modal do chat */
+        .chat-modal {
+            position: fixed;
+            bottom: 6rem;
+            right: 2rem;
+            width: 400px;
+            height: 580px;
+            background: #0a0a0a;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            z-index: 9995;
+            display: flex;
+            flex-direction: column;
             overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            box-shadow:
+                0 24px 64px rgba(0, 0, 0, 0.6),
+                0 0 0 1px rgba(255, 255, 255, 0.04),
+                inset 0 1px 0 rgba(255, 255, 255, 0.06);
+            transform: translateY(16px) scale(0.97);
+            opacity: 0;
+            pointer-events: none;
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+                        opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .chat-modal.visible {
+            transform: translateY(0) scale(1);
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        /* Header da modal */
+        .chat-modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 1.25rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+            background: #0e0e0e;
+            flex-shrink: 0;
+        }
+        .chat-modal-header-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .chat-status-dot {
+            width: 8px;
+            height: 8px;
+            background: #4ade80;
+            border-radius: 50%;
+            box-shadow: 0 0 8px rgba(74, 222, 128, 0.6);
+            animation: pulse-dot 2s infinite;
+        }
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        .chat-modal-title {
+            font-family: 'Barlow', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #e8e8e8;
+            letter-spacing: 0.02em;
+        }
+        .chat-modal-subtitle {
+            font-family: 'Barlow', sans-serif;
+            font-size: 0.7rem;
+            color: rgba(255,255,255,0.35);
+            letter-spacing: 0.03em;
+            margin-top: 1px;
+        }
+        .chat-modal-close {
+            width: 28px;
+            height: 28px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.15s ease;
+        }
+        .chat-modal-close:hover {
+            background: rgba(255,255,255,0.1);
+        }
+        .chat-modal-close svg {
+            width: 14px;
+            height: 14px;
+            color: rgba(255,255,255,0.5);
+        }
+
+        /* iframe container */
+        .chat-iframe-wrapper {
+            flex: 1;
+            overflow: hidden;
+            position: relative;
+        }
+        .chat-iframe-wrapper iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: block;
+        }
+
+        /* Responsivo mobile */
+        @media (max-width: 480px) {
+            .chat-modal {
+                right: 0;
+                bottom: 0;
+                width: 100%;
+                height: 75vh;
+                border-radius: 16px 16px 0 0;
+            }
+            .chat-fab {
+                bottom: 1.25rem;
+                right: 1.25rem;
+            }
         }
     </style>
 </head>
@@ -230,7 +396,6 @@
         </nav>
     </header>
 
-    <!-- Anúncio -->
     <div class="announcement-bar">
         <p>🎉 Ganhe 20% OFF na primeira compra com o cupom: <strong>QUEROCAFE</strong></p>
     </div>
@@ -246,7 +411,6 @@
     <section id="produtos" class="products">
         <h2>Nossos grãos selecionados</h2>
         <div class="product-grid">
-            <!-- Primeira Linha -->
             <div class="product-card">
                 <div class="product-image" style="background-image: url('https://github.com/vqrca/RAG_chatbot/blob/main/Imagens/bourbon_vermelho.jpg?raw=true')"></div>
                 <div class="product-info">
@@ -256,48 +420,42 @@
                     <div class="product-price">R$ 41,00 / 250g</div>
                 </div>
             </div>
-
             <div class="product-card">
                 <div class="product-image" style="background-image: url('https://github.com/vqrca/RAG_chatbot/blob/main/Imagens/bourbon_amarelo.jpg?raw=true')"></div>
                 <div class="product-info">
                     <h3>Bourbon amarelo</h3>
-                    <div class="product-taste">Perfil sensorial: Maracujá, ameixa e nêspera </div>
-                    <div class="product-taste">Processo: Cereja descascado </div>
+                    <div class="product-taste">Perfil sensorial: Maracujá, ameixa e nêspera</div>
+                    <div class="product-taste">Processo: Cereja descascado</div>
                     <div class="product-price">R$ 43,00 / 250g</div>
                 </div>
             </div>
-
             <div class="product-card">
                 <div class="product-image" style="background-image: url('https://github.com/vqrca/RAG_chatbot/blob/main/Imagens/blend.jpg?raw=true')"></div>
                 <div class="product-info">
                     <h3>Blend especial</h3>
                     <div class="product-taste">Perfil sensorial: Caramelo e chocolate</div>
-                    <div class="product-taste">Processo: Cereja Descascado e natural </div>
+                    <div class="product-taste">Processo: Cereja Descascado e natural</div>
                     <div class="product-price">R$ 37,50 / 250g</div>
                 </div>
             </div>
-
-            <!-- Segunda Linha -->
             <div class="product-card">
                 <div class="product-image" style="background-image: url('https://github.com/vqrca/RAG_chatbot/blob/main/Imagens/catuai_amarelo.jpg?raw=true')"></div>
                 <div class="product-info">
                     <h3>Catuaí amarelo</h3>
-                    <div class="product-taste">Perfil sensorial: Acerola e pêssego </div>
+                    <div class="product-taste">Perfil sensorial: Acerola e pêssego</div>
                     <div class="product-taste">Processo: Fermentado</div>
-                    <div class="product-price">R$ 55,00/ 250g</div>
+                    <div class="product-price">R$ 55,00 / 250g</div>
                 </div>
             </div>
-
             <div class="product-card">
                 <div class="product-image" style="background-image: url('https://github.com/vqrca/RAG_chatbot/blob/main/Imagens/geisha.jpg?raw=true')"></div>
                 <div class="product-info">
                     <h3>Geisha</h3>
-                    <div class="product-taste">Perfil sensorial: Jasmim e mamão papaya </div>
+                    <div class="product-taste">Perfil sensorial: Jasmim e mamão papaya</div>
                     <div class="product-taste">Processo: Fermentado</div>
                     <div class="product-price">R$ 105,00 / 250g</div>
                 </div>
             </div>
-
             <div class="product-card">
                 <div class="product-image" style="background-image: url('https://github.com/vqrca/RAG_chatbot/blob/main/Imagens/yirgacheffe.jpg?raw=true')"></div>
                 <div class="product-info">
@@ -309,20 +467,6 @@
             </div>
         </div>
     </section>
-
-    <!-- Chatbot Section -->
-        <section class="chatbot-section">
-            <h2>Fale com nosso assistente</h2>
-            <p>Tire suas dúvidas sobre nossos cafés especiais!</p>
-            <div class="chatbot-container">
-                <iframe
-                    src="https://decolumertz-chatbot-serenatto.hf.space"
-                    width="100%"
-                    height="600px"
-                    style="border: none;"
-                ></iframe>
-            </div>
-        </section>
 
     <footer>
         <div class="footer-content">
@@ -344,7 +488,73 @@
                 </div>
             </div>
         </div>
-        
     </footer>
+
+    <!-- Overlay -->
+    <div class="chat-overlay" id="chatOverlay" onclick="toggleChat()"></div>
+
+    <!-- Modal do Chatbot -->
+    <div class="chat-modal" id="chatModal">
+        <div class="chat-modal-header">
+            <div class="chat-modal-header-left">
+                <div class="chat-status-dot"></div>
+                <div>
+                    <div class="chat-modal-title">Assistente Serenatto</div>
+                    <div class="chat-modal-subtitle">Especialista em cafés especiais</div>
+                </div>
+            </div>
+            <button class="chat-modal-close" onclick="toggleChat()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M18 6L6 18M6 6l12 12"/>
+                </svg>
+            </button>
+        </div>
+        <div class="chat-iframe-wrapper">
+            <iframe
+                id="chatIframe"
+                src=""
+                data-src="https://decolumertz-chatbot-serenatto.hf.space"
+                allow="microphone"
+            ></iframe>
+        </div>
+    </div>
+
+    <!-- Botão flutuante -->
+    <button class="chat-fab" id="chatFab" onclick="toggleChat()" aria-label="Abrir assistente">
+        <!-- Ícone chat -->
+        <svg class="icon-chat" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+        </svg>
+        <!-- Ícone fechar -->
+        <svg class="icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 6L6 18M6 6l12 12"/>
+        </svg>
+    </button>
+
+    <script>
+        let isOpen = false;
+
+        function toggleChat() {
+            isOpen = !isOpen;
+            const modal = document.getElementById('chatModal');
+            const overlay = document.getElementById('chatOverlay');
+            const fab = document.getElementById('chatFab');
+            const iframe = document.getElementById('chatIframe');
+
+            if (isOpen) {
+                // Lazy load do iframe apenas quando abrir pela primeira vez
+                if (!iframe.src || iframe.src === window.location.href) {
+                    iframe.src = iframe.dataset.src;
+                }
+                modal.classList.add('visible');
+                overlay.classList.add('visible');
+                fab.classList.add('open');
+            } else {
+                modal.classList.remove('visible');
+                overlay.classList.remove('visible');
+                fab.classList.remove('open');
+            }
+        }
+    </script>
 </body>
 </html>
