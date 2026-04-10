@@ -68,7 +68,7 @@ def resetar_chat():
 
 with gr.Blocks() as demo:
     gr.Markdown("# Chatbot da Serenatto")
-    chatbot = gr.Chatbot(type="messages")
+    chatbot = gr.Chatbot()
     msg = gr.Textbox(label="Digite a sua mensagem")
     limpar = gr.Button("Limpar")
     msg.submit(converse_com_bot, [msg, chatbot], [msg, chatbot])
