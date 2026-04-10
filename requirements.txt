@@ -1,0 +1,9 @@
+gradio
+llama-index
+llama-index-readers-file
+llama-index-embeddings-huggingface
+llama-index-vector-stores-chroma
+llama-index-llms-groq
+chromadb
+opentelemetry-api==1.38.0
+opentelemetry-sdk==1.38.0
