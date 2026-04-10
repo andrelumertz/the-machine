@@ -17,8 +17,8 @@ class ChromaEmbeddingWrapper(EmbeddingFunction):
         return [self.model.get_text_embedding(text) for text in input]
 
 # Configurando embeddings
-embed_model = HuggingFaceEmbedding(model_name="intfloat/multilingual-e5-large")
-embed_model_chroma = ChromaEmbeddingWrapper(model_name="intfloat/multilingual-e5-large")
+embed_model = HuggingFaceEmbedding(model_name="sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2")
+embed_model_chroma = ChromaEmbeddingWrapper(model_name="sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2")
 
 # Carregando documentos
 documentos = SimpleDirectoryReader(input_dir="documents").load_data()
