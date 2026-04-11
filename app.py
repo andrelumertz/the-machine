@@ -75,31 +75,58 @@ def resetar_chat():
 # 4. Interface Gradio (Inicia rápido!)
 # CSS atualizado para alinhar tudo e remover elementos desnecessários, mantendo o foco no chat
 css = """
+/* 1. Reset de Cores e Fundo */
 footer {display: none !important;}
-.gradio-container {background-color: transparent !important; border: none !important;}
-/* Remove o contorno azul ao clicar e deixa o chat liso */
-#chatbot {border: none !important; box-shadow: none !important;}
-/* Estiliza o botão de envio para ser um círculo ou ícone limpo */
-#send_btn {
-    max-width: 50px !important;
-    min-width: 50px !important;
-    border-radius: 50% !important;
-}
-/* Esconde a barra de rolagem do container principal do Gradio */
-.gradio-container { overflow: hidden !important; }
-
-/* Deixa a barra de rolagem do chat mais discreta */
-.message-wrap::-webkit-scrollbar {
-    width: 6px;
-}
-.message-wrap::-webkit-scrollbar-thumb {
-    background: #333;
-    border-radius: 10px;
-}
-#send_btn {
-    background-color: #58664d !important; 
+.gradio-container {
+    background-color: #0a0a0a !important; 
     border: none !important;
 }
+
+/* 2. Chatbot sem bordas e sem fundo */
+#chatbot {
+    background-color: #0a0a0a !important; 
+    border: none !important; 
+    box-shadow: none !important;
+}
+
+/* 3. Estilo Minimalista das Mensagens (Sem Bolhas) */
+.message {
+    background: transparent !important; /* Remove o fundo da bolha */
+    border: none !important;            /* Remove bordas */
+    box-shadow: none !important;        /* Remove sombras */
+    padding: 12px 0 !important;         /* Espaçamento vertical entre falas */
+    font-size: 0.95rem !important;
+    line-height: 1.5 !important;
+}
+
+/* 4. Diferenciando o Bot do Usuário sutilmente */
+.message.bot {
+    border-left: 2px solid #58664d !important; /* Linha verde lateral sutil */
+    padding-left: 15px !important;
+    color: #e8e8e8 !important;
+}
+
+.message.user {
+    color: #8c774c !important; /* Texto do usuário no tom dourado/bege do site */
+    text-align: left !important; /* Mantém alinhado à esquerda para leitura fluida */
+}
+
+/* 5. Estilização do Input e Botão */
+input[type="text"] {
+    background-color: #1a1a1a !important;
+    color: white !important;
+    border: 1px solid #333 !important;
+    border-radius: 8px !important;
+}
+
+#send_btn {
+    background-color: #58664d !important;
+    border: none !important;
+}
+
+/* Esconde scrollbars indesejadas */
+.gradio-container { overflow: hidden !important; }
+.message-wrap::-webkit-scrollbar { width: 0px !important; }
 """
 
 with gr.Blocks() as demo:
