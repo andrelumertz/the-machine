@@ -85,6 +85,21 @@ footer {display: none !important;}
     min-width: 50px !important;
     border-radius: 50% !important;
 }
+/* Esconde a barra de rolagem do container principal do Gradio */
+.gradio-container { overflow: hidden !important; }
+
+/* Deixa a barra de rolagem do chat mais discreta */
+.message-wrap::-webkit-scrollbar {
+    width: 6px;
+}
+.message-wrap::-webkit-scrollbar-thumb {
+    background: #333;
+    border-radius: 10px;
+}
+#send_btn {
+    background-color: #58664d !important; 
+    border: none !important;
+}
 """
 
 with gr.Blocks() as demo:
