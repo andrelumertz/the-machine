@@ -87,14 +87,13 @@ footer {display: none !important;}
 }
 """
 
-# 1. Removido o css e theme daqui (conforme o aviso do Gradio 6)
 with gr.Blocks() as demo:
     with gr.Column(elem_id="col-container"):
         chatbot = gr.Chatbot(
             show_label=False, 
             height=430,
-            # bubble_full_width removido pois causava o erro
-            show_copy_button=True # Substituí o share pelo copy, que é mais útil
+            # Removi o show_copy_button e show_share_button
+            # O Gradio 6 já traz opções de interação por padrão
         )
         
         with gr.Row(variant="compact"):
@@ -109,10 +108,10 @@ with gr.Blocks() as demo:
         with gr.Row():
              limpar = gr.Button("Limpar Histórico", size="sm", variant="secondary")
 
-    # Ações
+    # Ações (Mantenha igual)
     msg.submit(converse_com_bot, [msg, chatbot], [msg, chatbot])
     submit_btn.click(converse_com_bot, [msg, chatbot], [msg, chatbot])
     limpar.click(resetar_chat, None, chatbot, queue=False)
 
-# 2. Agora o css e o theme entram aqui no launch!
+# O launch com o CSS e Tema (conforme a nova regra do Gradio 6)
 demo.launch(css=css, theme=gr.themes.Soft())
