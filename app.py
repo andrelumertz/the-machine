@@ -75,85 +75,70 @@ def resetar_chat():
 # 4. Interface Gradio (Inicia rápido!)
 # CSS atualizado para alinhar tudo e remover elementos desnecessários, mantendo o foco no chat
 css = """
-/* 1. Reset de Cores e Fundo */
+/* 1. Reset Total de Fundo e Bordas */
 footer {display: none !important;}
-.gradio-container {
-    background-color: #0a0a0a !important; 
-    border: none !important;
+.gradio-container {background-color: #0a0a0a !important; border: none !important;}
+#chatbot {background-color: #0a0a0a !important; border: none !important; box-shadow: none !important;}
+
+/* 2. Estilo das Mensagens (Minimalista) */
+.message {background: transparent !important; border: none !important; padding: 12px !important; color: white !important;}
+.message.bot {border-left: 2px solid #58664d !important;}
+.message.user {color: #8c774c !important;}
+
+/* 3. ALINHAMENTO: Colocando input e botão lado a lado */
+.row-input {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 10px !important;
+    background-color: #0a0a0a !important;
+    padding: 10px !important;
 }
 
-/* 2. Chatbot sem bordas e sem fundo */
-#chatbot {
-    background-color: #0a0a0a !important; 
-    border: none !important; 
-    box-shadow: none !important;
-}
-
-/* 3. Estilo Minimalista das Mensagens (Sem Bolhas) */
-.message {
-    background: transparent !important; /* Remove o fundo da bolha */
-    border: none !important;            /* Remove bordas */
-    box-shadow: none !important;        /* Remove sombras */
-    padding: 12px 0 !important;         /* Espaçamento vertical entre falas */
-    font-size: 0.95rem !important;
-    line-height: 1.5 !important;
-}
-
-/* 4. Diferenciando o Bot do Usuário sutilmente */
-.message.bot {
-    border-left: 2px solid #58664d !important; /* Linha verde lateral sutil */
-    padding-left: 15px !important;
-    color: #e8e8e8 !important;
-}
-
-.message.user {
-    color: #8c774c !important; /* Texto do usuário no tom dourado/bege do site */
-    text-align: left !important; /* Mantém alinhado à esquerda para leitura fluida */
-}
-
-/* 5. Estilização do Input e Botão */
-input[type="text"] {
-    background-color: #1a1a1a !important;
-    color: white !important;
-    border: 1px solid #333 !important;
-    border-radius: 8px !important;
-}
-
+/* 4. Estilo do Botão de Envio (Circular e Verde) */
 #send_btn {
     background-color: #58664d !important;
     border: none !important;
+    max-width: 45px !important;
+    min-width: 45px !important;
+    height: 45px !important;
+    border-radius: 50% !important;
+    cursor: pointer !important;
 }
 
-/* Esconde scrollbars indesejadas */
+/* 5. Estilo do Campo de Texto */
+#msg_input {
+    background-color: #1a1a1a !important;
+    border: 1px solid #333 !important;
+    color: white !important;
+    border-radius: 20px !important;
+}
+
+/* Esconde a barra de rolagem lateral branca que apareceu no seu print */
 .gradio-container { overflow: hidden !important; }
-.message-wrap::-webkit-scrollbar { width: 0px !important; }
 """
 
-with gr.Blocks() as demo:
-    with gr.Column(elem_id="col-container"):
-        chatbot = gr.Chatbot(
-            show_label=False, 
-            height=430,
-            # Removi o show_copy_button e show_share_button
-            # O Gradio 6 já traz opções de interação por padrão
+with gr.Blocks(css=css) as demo:
+    # O chatbot ocupa a maior parte do espaço
+    chatbot = gr.Chatbot(show_label=False, height=450)
+    
+    # Criamos uma Row específica para o input e a setinha
+    with gr.Row(elem_classes="row-input"):
+        msg = gr.Textbox(
+            show_label=False,
+            placeholder="Type your message...",
+            container=False,
+            elem_id="msg_input",
+            scale=8
         )
-        
-        with gr.Row(variant="compact"):
-            msg = gr.Textbox(
-                show_label=False,
-                placeholder="Type your message...",
-                container=False,
-                scale=10
-            )
-            submit_btn = gr.Button("➤", elem_id="send_btn", variant="primary")
+        submit_btn = gr.Button("➤", elem_id="send_btn", variant="primary", scale=1)
             
-        with gr.Row():
-             limpar = gr.Button("Limpar Histórico", size="sm", variant="secondary")
+    # Botão de limpar mais discreto no fundo
+    limpar = gr.Button("Limpar Histórico", size="sm", variant="secondary")
 
-    # Ações (Mantenha igual)
+    # Ações
     msg.submit(converse_com_bot, [msg, chatbot], [msg, chatbot])
     submit_btn.click(converse_com_bot, [msg, chatbot], [msg, chatbot])
     limpar.click(resetar_chat, None, chatbot, queue=False)
 
-# O launch com o CSS e Tema (conforme a nova regra do Gradio 6)
-demo.launch(css=css, theme=gr.themes.Soft())
+demo.launch(theme=gr.themes.Soft())
