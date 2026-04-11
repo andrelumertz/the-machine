@@ -72,41 +72,29 @@ def resetar_chat():
         chat_engine.reset()
     return []
 
-# 4. Interface Gradio (Inicia rápido!)
-# CSS atualizado para alinhar tudo e remover elementos desnecessários, mantendo o foco no chat
 css = """
-/* 1. Reset Total de Fundo e Bordas */
 footer {display: none !important;}
-.gradio-container {background-color: #0a0a0a !important; border: none !important;}
-#chatbot {background-color: #0a0a0a !important; border: none !important; box-shadow: none !important;}
+/* Força o preto em todas as camadas possíveis */
+.gradio-container, .main, .wrap, .inner-wrap, #col-container {
+    background-color: #0a0a0a !important; 
+    border: none !important;
+}
 
-/* 2. Estilo das Mensagens (Minimalista) */
-.message {background: transparent !important; border: none !important; padding: 12px !important; color: white !important;}
-.message.bot {border-left: 2px solid #58664d !important;}
-.message.user {color: #8c774c !important;}
+#chatbot {
+    background-color: #0a0a0a !important; 
+    border: none !important;
+}
 
-/* 3. ALINHAMENTO: Colocando input e botão lado a lado */
+/* A classe que vai alinhar o input e a setinha */
 .row-input {
     display: flex !important;
     flex-direction: row !important;
     align-items: center !important;
-    gap: 10px !important;
-    background-color: #0a0a0a !important;
+    gap: 8px !important;
     padding: 10px !important;
+    background-color: #0a0a0a !important;
 }
 
-/* 4. Estilo do Botão de Envio (Circular e Verde) */
-#send_btn {
-    background-color: #58664d !important;
-    border: none !important;
-    max-width: 45px !important;
-    min-width: 45px !important;
-    height: 45px !important;
-    border-radius: 50% !important;
-    cursor: pointer !important;
-}
-
-/* 5. Estilo do Campo de Texto */
 #msg_input {
     background-color: #1a1a1a !important;
     border: 1px solid #333 !important;
@@ -114,27 +102,40 @@ footer {display: none !important;}
     border-radius: 20px !important;
 }
 
-/* Esconde a barra de rolagem lateral branca que apareceu no seu print */
+#send_btn {
+    background-color: #58664d !important;
+    border: none !important;
+    min-width: 45px !important;
+    max-width: 45px !important;
+    height: 45px !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+/* termina a barra de rolagem branca lateral */
 .gradio-container { overflow: hidden !important; }
+.message-wrap::-webkit-scrollbar { width: 0px !important; }
 """
 
 with gr.Blocks(css=css) as demo:
-    # O chatbot ocupa a maior parte do espaço
-    chatbot = gr.Chatbot(show_label=False, height=450)
-    
-    # Criamos uma Row específica para o input e a setinha
-    with gr.Row(elem_classes="row-input"):
-        msg = gr.Textbox(
-            show_label=False,
-            placeholder="Type your message...",
-            container=False,
-            elem_id="msg_input",
-            scale=8
-        )
-        submit_btn = gr.Button("➤", elem_id="send_btn", variant="primary", scale=1)
+    with gr.Column(elem_id="col-container"):
+        # Reduzi um pouco o height para garantir que não transborde na modal
+        chatbot = gr.Chatbot(show_label=False, height=400)
+        
+        # O PULO DO GATO: Aplicando a classe CSS na Row
+        with gr.Row(elem_classes=["row-input"]):
+            msg = gr.Textbox(
+                show_label=False,
+                placeholder="Type your message...",
+                container=False,
+                elem_id="msg_input",
+                scale=9 # Ocupa a maior parte da linha
+            )
+            submit_btn = gr.Button("➤", elem_id="send_btn", scale=1)
             
-    # Botão de limpar mais discreto no fundo
-    limpar = gr.Button("Limpar Histórico", size="sm", variant="secondary")
+        limpar = gr.Button("Limpar Histórico", size="sm", variant="secondary")
 
     # Ações
     msg.submit(converse_com_bot, [msg, chatbot], [msg, chatbot])
