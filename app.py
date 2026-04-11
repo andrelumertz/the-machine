@@ -73,14 +73,47 @@ def resetar_chat():
     return []
 
 # 4. Interface Gradio (Inicia rápido!)
-with gr.Blocks() as demo:
-    gr.Markdown("# Chatbot da Serenatto - The Machine")
-    chatbot = gr.Chatbot()
-    msg = gr.Textbox(label="Digite a sua mensagem")
-    limpar = gr.Button("Limpar")
+# CSS atualizado para alinhar tudo e remover elementos desnecessários, mantendo o foco no chat
+css = """
+footer {display: none !important;}
+.gradio-container {background-color: transparent !important; border: none !important;}
+/* Remove o contorno azul ao clicar e deixa o chat liso */
+#chatbot {border: none !important; box-shadow: none !important;}
+/* Estiliza o botão de envio para ser um círculo ou ícone limpo */
+#send_btn {
+    max-width: 50px !important;
+    min-width: 50px !important;
+    border-radius: 50% !important;
+}
+"""
+
+with gr.Blocks(css=css, theme=gr.themes.Soft()) as demo:
+    with gr.Column(elem_id="col-container"):
+        chatbot = gr.Chatbot(
+            show_label=False, 
+            bubble_full_width=False, 
+            height=430,
+            show_share_button=False #Remove o ícone de compartilhar para limpar o UI
+        )
+        
+        
+        with gr.Row(variant="compact"):
+            msg = gr.Textbox(
+                show_label=False,
+                placeholder="Type your message...",
+                container=False,
+                scale=10 # Dá mais espaço para o texto
+            )
+            
+            submit_btn = gr.Button("➤", elem_id="send_btn", variant="primary")
+            
+        with gr.Row():
+            limpar = gr.Button("Limpar Histórico", size="sm", variant="secondary")
+
     
     msg.submit(converse_com_bot, [msg, chatbot], [msg, chatbot])
+    submit_btn.click(converse_com_bot, [msg, chatbot], [msg, chatbot])
+    
     limpar.click(resetar_chat, None, chatbot, queue=False)
 
-# O launch roda imediatamente, avisando ao HF que o app está OK
 demo.launch()
