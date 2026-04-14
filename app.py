@@ -75,7 +75,7 @@ def resetar_chat():
 css = """
 footer {display: none !important;}
 /* Força o preto em todas as camadas possíveis */
-.gradio-container, .main, .wrap, .inner-wrap, #col-container {
+.gradio-container, .main, .wrap, .inner-wrap, #col-container placeholder-content.svelte-1rn3hyj .bubble-wrap.svelte-kpz1 {
     background-color: #0a0a0a !important; 
     border: none !important;
 }
