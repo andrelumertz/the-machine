@@ -119,7 +119,7 @@ footer {display: none !important;}
 .message-wrap::-webkit-scrollbar { width: 0px !important; }
 """
 
-with gr.Blocks(css=css) as demo:
+with gr.Blocks() as demo:
     with gr.Column(elem_id="col-container"):
         # Reduzi um pouco o height para garantir que não transborde na modal
         chatbot = gr.Chatbot(show_label=False, height=400)
@@ -142,4 +142,8 @@ with gr.Blocks(css=css) as demo:
     submit_btn.click(converse_com_bot, [msg, chatbot], [msg, chatbot])
     limpar.click(resetar_chat, None, chatbot, queue=False)
 
-demo.launch(theme=gr.themes.Soft())
+demo.launch(
+    share=True,
+    theme=gr.themes.Soft(),
+    css=css
+)
