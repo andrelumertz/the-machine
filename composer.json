@@ -1,0 +1,17 @@
+{
+    "name": "andre/the_machine",
+    "autoload": {
+        "psr-4": {
+            "Andre\\TheMachine\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "André Lumertz",
+            "email": "andrelumertzmartins@gmail.com"
+        }
+    ],
+    "require": {
+        "dompdf/dompdf": "^3.1"
+    }
+}
