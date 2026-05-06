@@ -38,15 +38,15 @@
   <link rel="stylesheet" href="css/form.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="icon" href="img/icone-serenatto.png" type="image/x-icon">
+  <link rel="icon" href="img/logo-Blackout.png" type="image/x-icon">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <title>Serenatto - Editar Produto</title>
+  <title>Blackout - Editar Produto</title>
 </head>
 <body>
 <main>
   <section class="container-admin-banner">
-    <img src="img/logo-serenatto-horizontal.png" class="logo-admin" alt="logo-serenatto">
+    <img src="img/logo-Blackout-horizontal.png" class="logo-admin" alt="logo-Blackout">
     <h1>Editar Produto</h1>
     <img class= "ornaments" src="img/ornaments-coffee.png" alt="ornaments">
   </section>

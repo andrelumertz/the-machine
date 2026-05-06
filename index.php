@@ -23,10 +23,10 @@
     <link rel="stylesheet" href="css/index.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="icon" href="img/icone-serenatto.png" type="image/x-icon">
+    <link rel="icon" href="img/logo-Blackout.png" type="image/x-icon">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <title>Serenatto - Cardápio</title>
+    <title>Blackout - Cardápio</title>
 
     <style>
     /* ========== CHATBOT FLUTUANTE ========== */
@@ -78,7 +78,7 @@
 
       /* Tooltip */
       .chat-fab::before {
-        content: "Assistente Serenatto";
+        content: "Assistente Blackout";
         position: absolute;
         right: calc(100% + 12px);
         background: #0e0e0e;
@@ -247,7 +247,7 @@
     <main>
         <section class="container-banner">
             <div class="container-texto-banner">
-                <img src="img/logo-blackout-horizontal.jpg" class="logo" alt="logo-serenatto">
+                <img src="img/logo-blackout-horizontal.jpg" class="logo" alt="logo-Blackout">
             </div>
         </section>
         <h2>Cardápio Digital</h2>
@@ -298,7 +298,7 @@
         <div class="chat-modal-header-left">
           <div class="chat-status-dot"></div>
           <div>
-            <div class="chat-modal-title">Assistente Serenatto</div>
+            <div class="chat-modal-title">Assistente Blackout</div>
             <div class="chat-modal-subtitle">
               Especialista em cafés especiais
             </div>

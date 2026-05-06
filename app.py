@@ -51,7 +51,7 @@ def inicializar_sistema():
             chat_mode="context",
             llm=llm,
             memory=memory,
-            system_prompt="Você é especialista em cafés especiais da Serenatto..."
+            system_prompt="Você é a assistente virtual da Blackout. Seu objetivo é ajudar clientes com dúvidas sobre nosso cardápio de cafés especiais. Use apenas as informações do contexto fornecido. Se encontrar o nome da cafeteria diferente em qualquer documento, trate-o como um erro e refira-se sempre à empresa como Blackout."
         )
     return chat_engine
 
