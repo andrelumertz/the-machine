@@ -140,6 +140,7 @@ with gr.Blocks() as demo:
     # Ações
     msg.submit(converse_com_bot, [msg, chatbot], [msg, chatbot])
     submit_btn.click(converse_com_bot, [msg, chatbot], [msg, chatbot])
-    limpar.click(resetar_chat, None, chatbot, queue=False)
+    limpar.click(resetar_chat, None, chatbot)
 
-demo.launch()
+demo.queue()
+demo.launch(server_name="0.0.0.0", show_error=True)
