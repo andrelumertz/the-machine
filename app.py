@@ -25,16 +25,14 @@ def inicializar_sistema():
     if chat_engine is None:
         print(">>> Iniciando sistema RAG: Blackout Coffee...")
         
-        # Embeddings
         embed_model = HuggingFaceEmbedding(model_name="sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2")
         embed_model_chroma = ChromaEmbeddingWrapper(model_name="sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2")
 
-        # Documentos
         documentos = SimpleDirectoryReader(input_dir="documents").load_data()
         node_parser = SentenceSplitter(chunk_size=1200)
         nodes = node_parser.get_nodes_from_documents(documentos)
 
-        # ChromaDB - Caminho temporário para evitar erros de permissão
+        # Usando /tmp para evitar erros de escrita em produção
         db = chromadb.PersistentClient(path="/tmp/chroma_db")
         chroma_collection = db.get_or_create_collection(
             name="documentos_blackout",
@@ -44,7 +42,6 @@ def inicializar_sistema():
         storage_context = StorageContext.from_defaults(vector_store=vector_store)
         index = VectorStoreIndex(nodes, storage_context=storage_context, embed_model=embed_model)
 
-        # LLM e Chat Engine
         api_key = os.environ.get("GROQ_API") or os.environ.get("GROQ_API_KEY")
         llm = Groq(model="llama-3.3-70b-versatile", api_key=api_key)
         
@@ -61,7 +58,7 @@ def inicializar_sistema():
 def converse_com_bot(message, chat_history):
     if chat_history is None:
         chat_history = []
-        
+    
     engine = inicializar_sistema()
     response = engine.chat(message)
     
@@ -74,36 +71,20 @@ def resetar_chat():
         chat_engine.reset()
     return []
 
-# CSS Dark Tech
-css = """
+# CSS injetado via HTML para evitar conflitos com o motor de templates Jinja2
+css_html = """
+<style>
 footer {display: none !important;}
-.gradio-container, .main, .wrap, .inner-wrap {
-    background-color: #0a0a0a !important; 
-}
-#chatbot {
-    background-color: #0a0a0a !important; 
-    border: none !important;
-}
-.row-input {
-    display: flex !important;
-    align-items: center !important;
-    gap: 8px !important;
-    padding: 10px !important;
-    background-color: #0a0a0a !important;
-}
-#msg_input {
-    background-color: #1a1a1a !important;
-    color: white !important;
-    border-radius: 20px !important;
-}
-#send_btn {
-    background-color: #58664d !important;
-    min-width: 45px !important;
-    border-radius: 50% !important;
-}
+.gradio-container, .main, .wrap, .inner-wrap { background-color: #0a0a0a !important; }
+#chatbot { background-color: #0a0a0a !important; border: none !important; }
+.row-input { display: flex !important; align-items: center !important; gap: 8px !important; padding: 10px !important; background-color: #0a0a0a !important; }
+#msg_input { background-color: #1a1a1a !important; color: white !important; border-radius: 20px !important; }
+#send_btn { background-color: #58664d !important; min-width: 45px !important; border-radius: 50% !important; }
+</style>
 """
 
-with gr.Blocks(css=css) as demo:
+with gr.Blocks() as demo:
+    gr.HTML(css_html) # Injeção segura do CSS
     with gr.Column(elem_id="col-container"):
         chatbot = gr.Chatbot(show_label=False, height=400)
         
@@ -119,13 +100,14 @@ with gr.Blocks(css=css) as demo:
             
         limpar = gr.Button("Limpar Histórico", size="sm", variant="secondary")
 
-    # Ações - api_name=False evita o erro de tipagem no JSON Schema
+    # Ações configuradas para não expor API
     msg.submit(converse_com_bot, [msg, chatbot], [msg, chatbot], api_name=False)
     submit_btn.click(converse_com_bot, [msg, chatbot], [msg, chatbot], api_name=False)
     limpar.click(resetar_chat, None, chatbot, api_name=False)
 
-# Configurações de rede e interface para Hugging Face
-demo.queue().launch(
+# Configuração robusta para Hugging Face Spaces
+demo.queue()
+demo.launch(
     server_name="0.0.0.0", 
     server_port=7860, 
     show_api=False,
