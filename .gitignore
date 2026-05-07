@@ -13,3 +13,5 @@ composer.phar
 # Sistema
 .DS_Store
 Thumbs.db
+
+*.code-workspace
