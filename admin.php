@@ -31,6 +31,11 @@
   <link rel="icon" href="img/logo-Blackout.png" type="image/x-icon">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    
+    <script src="https://unpkg.com/lucide@latest" defer></script>
   <title>Blackout - Admin</title>
 </head>
 <body>
@@ -76,9 +81,16 @@
     <input type="submit" class="botao-cadastrar" value="Baixar Relatório"/>
   </form>
   </section>
-  <div style="text-align: right; margin: 10px;">
-    <a href="logout.php" class="botao-cadastrar" style="background-color: #ff6b6b; text-decoration: none;">Sair do Sistema</a>
+  <div style="text-align: right; padding: 20px;">
+    <a href="logout.php" class="botao-logout">
+        <i data-lucide="log-out"></i> Sair do Sistema
+    </a>
 </div>
 </main>
+<script>
+  window.addEventListener('load', () => {
+            lucide.createIcons();
+        });
+</script>
 </body>
 </html>
