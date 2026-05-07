@@ -71,45 +71,42 @@ def resetar_chat():
         chat_engine.reset()
     return []
 
-# CSS injetado via HTML para evitar conflitos com o motor de templates Jinja2
+# CSS injetado de forma simplificada
 css_html = """
 <style>
 footer {display: none !important;}
-.gradio-container, .main, .wrap, .inner-wrap { background-color: #0a0a0a !important; }
-#chatbot { background-color: #0a0a0a !important; border: none !important; }
-.row-input { display: flex !important; align-items: center !important; gap: 8px !important; padding: 10px !important; background-color: #0a0a0a !important; }
-#msg_input { background-color: #1a1a1a !important; color: white !important; border-radius: 20px !important; }
-#send_btn { background-color: #58664d !important; min-width: 45px !important; border-radius: 50% !important; }
+.gradio-container { background-color: #0a0a0a !important; }
+#msg_input { background-color: #1a1a1a !important; color: white !important; }
+#send_btn { background-color: #58664d !important; }
 </style>
 """
 
 with gr.Blocks() as demo:
-    gr.HTML(css_html) # Injeção segura do CSS
-    with gr.Column(elem_id="col-container"):
-        chatbot = gr.Chatbot(show_label=False, height=400)
+    gr.HTML(css_html)
+    chatbot = gr.Chatbot(height=400)
+    
+    with gr.Row():
+        msg = gr.Textbox(
+            show_label=False,
+            placeholder="Como posso ajudar a Blackout hoje?",
+            container=False,
+            scale=9
+        )
+        submit_btn = gr.Button("➤", scale=1)
         
-        with gr.Row(elem_classes=["row-input"]):
-            msg = gr.Textbox(
-                show_label=False,
-                placeholder="Como posso ajudar a Blackout hoje?",
-                container=False,
-                elem_id="msg_input",
-                scale=9
-            )
-            submit_btn = gr.Button("➤", elem_id="send_btn", scale=1)
-            
-        limpar = gr.Button("Limpar Histórico", size="sm", variant="secondary")
+    limpar = gr.Button("Limpar Histórico")
 
-    # Ações configuradas para não expor API
+    # Ações - api_name=False é OBRIGATÓRIO aqui
     msg.submit(converse_com_bot, [msg, chatbot], [msg, chatbot], api_name=False)
     submit_btn.click(converse_com_bot, [msg, chatbot], [msg, chatbot], api_name=False)
     limpar.click(resetar_chat, None, chatbot, api_name=False)
 
-# Configuração robusta para Hugging Face Spaces
+# NÃO use .queue() encadeado. Chame separado.
 demo.queue()
+
+# O launch mais limpo possível para o Hugging Face
 demo.launch(
-    server_name="0.0.0.0", 
-    server_port=7860, 
-    show_api=False,
-    share=False
+    server_name="0.0.0.0",
+    server_port=7860,
+    show_api=False
 )
