@@ -1,3 +1,13 @@
+title: Chatbot Blackout
+emoji: ☕
+colorFrom: gray
+colorTo: black
+sdk: gradio
+sdk_version: 4.26.0
+app_file: app.py
+pinned: false
+
+
 # ☕ Chatbot Blackout Coffee
 
 > Atendente inteligente 24h especializado em cafés especiais, utilizando arquitetura RAG para consultas precisas e alta performance com Groq LPU.
