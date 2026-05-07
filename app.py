@@ -34,7 +34,7 @@ def inicializar_sistema():
         node_parser = SentenceSplitter(chunk_size=1200)
         nodes = node_parser.get_nodes_from_documents(documentos)
 
-        # ChromaDB - Usando caminho temporário para evitar erros de permissão no Hugging Face
+        # ChromaDB - Caminho temporário para evitar erros de permissão
         db = chromadb.PersistentClient(path="/tmp/chroma_db")
         chroma_collection = db.get_or_create_collection(
             name="documentos_blackout",
@@ -45,7 +45,6 @@ def inicializar_sistema():
         index = VectorStoreIndex(nodes, storage_context=storage_context, embed_model=embed_model)
 
         # LLM e Chat Engine
-        # Tenta pegar a chave de dois nomes possíveis para garantir
         api_key = os.environ.get("GROQ_API") or os.environ.get("GROQ_API_KEY")
         llm = Groq(model="llama-3.3-70b-versatile", api_key=api_key)
         
@@ -120,14 +119,15 @@ with gr.Blocks(css=css) as demo:
             
         limpar = gr.Button("Limpar Histórico", size="sm", variant="secondary")
 
-    # Ações
-    msg.submit(converse_com_bot, [msg, chatbot], [msg, chatbot])
-    submit_btn.click(converse_com_bot, [msg, chatbot], [msg, chatbot])
-    limpar.click(resetar_chat, None, chatbot)
+    # Ações - api_name=False evita o erro de tipagem no JSON Schema
+    msg.submit(converse_com_bot, [msg, chatbot], [msg, chatbot], api_name=False)
+    submit_btn.click(converse_com_bot, [msg, chatbot], [msg, chatbot], api_name=False)
+    limpar.click(resetar_chat, None, chatbot, api_name=False)
 
-# Lançamento configurado para o Hugging Face
+# Configurações de rede e interface para Hugging Face
 demo.queue().launch(
     server_name="0.0.0.0", 
     server_port=7860, 
-    show_api=False
+    show_api=False,
+    share=False
 )
