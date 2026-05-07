@@ -9,21 +9,21 @@ from llama_index.llms.groq import Groq
 from llama_index.core.memory import ChatSummaryMemoryBuffer
 from chromadb import EmbeddingFunction, Documents, Embeddings
 
-# 1. Definições de Classe (Leve)
+# 1. Definições de Classe
 class ChromaEmbeddingWrapper(EmbeddingFunction):
     def __init__(self, model_name):
         self.model = HuggingFaceEmbedding(model_name=model_name)
     def __call__(self, input: Documents) -> Embeddings:
         return [self.model.get_text_embedding(text) for text in input]
 
-# 2. Variáveis Globais (Vazias no início)
+# 2. Variáveis Globais
 chat_engine = None
 
 def inicializar_sistema():
-    """Toda a carga pesada acontece aqui, apenas uma vez."""
     global chat_engine
+    
     if chat_engine is None:
-        print(">>> Iniciando 'The Machine': Carregando modelos e documentos...")
+        print(">>> Iniciando sistema RAG: Blackout Coffee...")
         
         # Embeddings
         embed_model = HuggingFaceEmbedding(model_name="sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2")
@@ -34,10 +34,10 @@ def inicializar_sistema():
         node_parser = SentenceSplitter(chunk_size=1200)
         nodes = node_parser.get_nodes_from_documents(documentos)
 
-        # ChromaDB
-        db = chromadb.PersistentClient(path="./chroma_db")
+        # ChromaDB - Usando caminho temporário para evitar erros de permissão no Hugging Face
+        db = chromadb.PersistentClient(path="/tmp/chroma_db")
         chroma_collection = db.get_or_create_collection(
-            name="documentos_serenatto",
+            name="documentos_blackout",
             embedding_function=embed_model_chroma
         )
         vector_store = ChromaVectorStore(chroma_collection=chroma_collection)
@@ -45,27 +45,27 @@ def inicializar_sistema():
         index = VectorStoreIndex(nodes, storage_context=storage_context, embed_model=embed_model)
 
         # LLM e Chat Engine
-        llm = Groq(model="llama-3.3-70b-versatile", api_key=os.environ.get("GROQ_API"))
+        # Tenta pegar a chave de dois nomes possíveis para garantir
+        api_key = os.environ.get("GROQ_API") or os.environ.get("GROQ_API_KEY")
+        llm = Groq(model="llama-3.3-70b-versatile", api_key=api_key)
+        
         memory = ChatSummaryMemoryBuffer(llm=llm, token_limit=256)
         chat_engine = index.as_chat_engine(
             chat_mode="context",
             llm=llm,
             memory=memory,
-            system_prompt="Você é a assistente virtual da Blackout. Seu objetivo é ajudar clientes com dúvidas sobre nosso cardápio de cafés especiais. Use apenas as informações do contexto fornecido. Se encontrar o nome da cafeteria diferente em qualquer documento, trate-o como um erro e refira-se sempre à empresa como Blackout."
+            system_prompt="Você é a assistente virtual da Blackout. Seu objetivo é ajudar clientes com dúvidas sobre nosso cardápio de cafés especiais. Use apenas as informações do contexto fornecido. Refira-se sempre à empresa como Blackout."
         )
     return chat_engine
 
-
 # 3. Funções da Interface
 def converse_com_bot(message, chat_history):
-    # Forçamos o histórico a ser uma lista simples para o Gradio não bugar na tipagem
     if chat_history is None:
         chat_history = []
         
     engine = inicializar_sistema()
     response = engine.chat(message)
     
-    # Formato de lista de tuplas/listas é mais estável para o Gradio 4.x
     chat_history.append((message, response.response))
     return "", chat_history
 
@@ -74,59 +74,37 @@ def resetar_chat():
     if chat_engine:
         chat_engine.reset()
     return []
-    global chat_engine
-    if chat_engine:
-        chat_engine.reset()
-    return []
 
+# CSS Dark Tech
 css = """
 footer {display: none !important;}
-/* Força o preto em todas as camadas possíveis */
-.gradio-container, .main, .wrap, .inner-wrap, #col-container placeholder-content.svelte-1rn3hyj .bubble-wrap.svelte-kpz1 {
+.gradio-container, .main, .wrap, .inner-wrap {
     background-color: #0a0a0a !important; 
-    border: none !important;
 }
-
 #chatbot {
     background-color: #0a0a0a !important; 
     border: none !important;
 }
-
-/* A classe que vai alinhar o input e a setinha */
 .row-input {
     display: flex !important;
-    flex-direction: row !important;
     align-items: center !important;
     gap: 8px !important;
     padding: 10px !important;
     background-color: #0a0a0a !important;
 }
-
 #msg_input {
     background-color: #1a1a1a !important;
-    border: 1px solid #333 !important;
     color: white !important;
     border-radius: 20px !important;
 }
-
 #send_btn {
     background-color: #58664d !important;
-    border: none !important;
     min-width: 45px !important;
-    max-width: 45px !important;
-    height: 45px !important;
     border-radius: 50% !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
 }
-
-/* termina a barra de rolagem branca lateral */
-.gradio-container { overflow: hidden !important; }
-.message-wrap::-webkit-scrollbar { width: 0px !important; }
 """
 
-with gr.Blocks(css=css) as demo: # Adicionei o parâmetro css aqui para garantir que carregue
+with gr.Blocks(css=css) as demo:
     with gr.Column(elem_id="col-container"):
         chatbot = gr.Chatbot(show_label=False, height=400)
         
@@ -147,10 +125,9 @@ with gr.Blocks(css=css) as demo: # Adicionei o parâmetro css aqui para garantir
     submit_btn.click(converse_com_bot, [msg, chatbot], [msg, chatbot])
     limpar.click(resetar_chat, None, chatbot)
 
-# show_api=False desativa a geração do esquema que está dando erro
+# Lançamento configurado para o Hugging Face
 demo.queue().launch(
     server_name="0.0.0.0", 
     server_port=7860, 
-    show_api=False,
-    share=False
+    show_api=False
 )
