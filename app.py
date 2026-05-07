@@ -142,8 +142,4 @@ with gr.Blocks() as demo:
     submit_btn.click(converse_com_bot, [msg, chatbot], [msg, chatbot])
     limpar.click(resetar_chat, None, chatbot, queue=False)
 
-demo.launch(
-    share=True,
-    theme=gr.themes.Soft(),
-    css=css
-)
+demo.launch()
