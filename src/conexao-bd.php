@@ -5,7 +5,7 @@ $host = 'turntable.proxy.rlwy.net';
 $port = '26772'; 
 $db   = 'railway';
 $user = 'root';
-$pass = 'SUA_SENHA_AQUI'; 
+$pass = 'YfrJKgKegowyRpXBErSnxHhpoGFDwewN'; 
 
 try {
     $pdo = new PDO("mysql:host=$host;port=$port;dbname=$db", $user, $pass);
