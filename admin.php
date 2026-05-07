@@ -76,6 +76,9 @@
     <input type="submit" class="botao-cadastrar" value="Baixar Relatório"/>
   </form>
   </section>
+  <div style="text-align: right; margin: 10px;">
+    <a href="logout.php" class="botao-cadastrar" style="background-color: #ff6b6b; text-decoration: none;">Sair do Sistema</a>
+</div>
 </main>
 </body>
 </html>
