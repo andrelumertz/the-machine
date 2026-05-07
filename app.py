@@ -55,18 +55,25 @@ def inicializar_sistema():
         )
     return chat_engine
 
+
 # 3. Funções da Interface
 def converse_com_bot(message, chat_history):
-    # O sistema só carrega quando você clica em enviar a primeira vez
+    # Forçamos o histórico a ser uma lista simples para o Gradio não bugar na tipagem
+    if chat_history is None:
+        chat_history = []
+        
     engine = inicializar_sistema()
     response = engine.chat(message)
     
-    chat_history = chat_history or []
-    chat_history.append({"role": "user", "content": message})
-    chat_history.append({"role": "assistant", "content": response.response})
+    # Formato de lista de tuplas/listas é mais estável para o Gradio 4.x
+    chat_history.append((message, response.response))
     return "", chat_history
 
 def resetar_chat():
+    global chat_engine
+    if chat_engine:
+        chat_engine.reset()
+    return []
     global chat_engine
     if chat_engine:
         chat_engine.reset()
@@ -119,19 +126,17 @@ footer {display: none !important;}
 .message-wrap::-webkit-scrollbar { width: 0px !important; }
 """
 
-with gr.Blocks() as demo:
+with gr.Blocks(css=css) as demo: # Adicionei o parâmetro css aqui para garantir que carregue
     with gr.Column(elem_id="col-container"):
-        # Reduzi um pouco o height para garantir que não transborde na modal
         chatbot = gr.Chatbot(show_label=False, height=400)
         
-        # O PULO DO GATO: Aplicando a classe CSS na Row
         with gr.Row(elem_classes=["row-input"]):
             msg = gr.Textbox(
                 show_label=False,
-                placeholder="Type your message...",
+                placeholder="Como posso ajudar a Blackout hoje?",
                 container=False,
                 elem_id="msg_input",
-                scale=9 # Ocupa a maior parte da linha
+                scale=9
             )
             submit_btn = gr.Button("➤", elem_id="send_btn", scale=1)
             
@@ -142,5 +147,10 @@ with gr.Blocks() as demo:
     submit_btn.click(converse_com_bot, [msg, chatbot], [msg, chatbot])
     limpar.click(resetar_chat, None, chatbot)
 
-demo.queue()
-demo.launch(server_name="0.0.0.0", show_error=True)
+# show_api=False desativa a geração do esquema que está dando erro
+demo.queue().launch(
+    server_name="0.0.0.0", 
+    server_port=7860, 
+    show_api=False,
+    share=False
+)
