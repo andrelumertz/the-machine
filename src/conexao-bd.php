@@ -1,9 +1,18 @@
 <?php 
 
-// $pdo = new PDO('mysql:host=localhost;dbname=test', $user, $pass);
+// Credenciais da Railway
+$host = 'turntable.proxy.rlwy.net';
+$port = '26772'; 
+$db   = 'railway';
+$user = 'root';
+$pass = 'SUA_SENHA_AQUI'; 
 
-$pdo = new PDO('mysql:host=localhost;dbname=serenatto', username:'root', password:'Deco@230794');
-
-// var_dump($pdo);
+try {
+    $pdo = new PDO("mysql:host=$host;port=$port;dbname=$db", $user, $pass);
+    //define o modo de erro para exception
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (PDOException $e) {
+    echo "Erro na conexão: " . $e->getMessage();
+}
 
 ?>
