@@ -1,11 +1,11 @@
 <?php 
 
-// Credenciais da Railway
-$host = 'turntable.proxy.rlwy.net';
-$port = '26772'; 
-$db   = 'railway';
-$user = 'root';
-$pass = 'YfrJKgKegowyRpXBErSnxHhpoGFDwewN'; 
+//Credenciais protegidas por variáveis de Ambiente
+$host = getenv('DB_HOST') ?: 'localhost'; //se não achar na nuvem, usa localhost
+$port = getenv('DB_PORT') ?: '3306';
+$db   = getenv('DB_NAME') ?: 'blackout_cafe';
+$user = getenv('DB_USER') ?: 'root';
+$pass = getenv('DB_PASSWORD') ?: '';
 
 try {
     $pdo = new PDO("mysql:host=$host;port=$port;dbname=$db", $user, $pass);
