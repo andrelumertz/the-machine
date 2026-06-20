@@ -10,6 +10,19 @@ main {
   height: 100vh;
 }
 
+.botao-logout {
+  color: #a1a1aa;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: color 0.2s;
+}
+
+.botao-logout:hover {
+  color: #ffffff;
+}
+
 .container-banner {
   width: 100%;
   height: 80%;

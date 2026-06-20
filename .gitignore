@@ -1,4 +1,17 @@
+# Python (já existentes)
 venv/
 __pycache__/
 *.pyc
 chroma_db/
+
+# PHP & Backend
+vendor/
+.env
+composer.phar
+*.log
+
+# Sistema
+.DS_Store
+Thumbs.db
+
+*.code-workspace
