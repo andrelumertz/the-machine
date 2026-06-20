@@ -93,6 +93,14 @@ def inicializar_sistema():
         llm = Groq(model="llama-3.3-70b-versatile", api_key=groq_api_key)
         Settings.llm = llm
         
+        # Define o LLM da Groq globalmente (geração de texto rápido)
+        llm = Groq(model="llama-3.3-70b-versatile", api_key=groq_api_key)
+        Settings.llm = llm
+        
+        # AQUI ESTÁ A CORREÇÃO: Força o LlamaIndex a saber que o Groq tem espaço de sobra
+        Settings.context_window = 8000
+        Settings.num_output = 1000
+        
         # Garante que o diretório de documentos exista
         if not os.path.exists("documents"):
             os.makedirs("documents")
