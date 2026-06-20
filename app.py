@@ -1,3 +1,6 @@
+import nest_asyncio
+nest_asyncio.apply()
+
 from dotenv import load_dotenv
 load_dotenv()
 

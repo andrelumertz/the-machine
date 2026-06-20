@@ -7,3 +7,4 @@ llama-index-llms-groq
 llama-index-embeddings-huggingface-api
 pypdf
 oslo.utils
+nest-asyncio
