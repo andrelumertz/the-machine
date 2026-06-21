@@ -17,7 +17,7 @@ class produtoRepositorio{
             $dados['nome'],
             $dados['descricao'],
             $dados['preco'],
-            $dados['imagem']
+            $dados['imagem'] ?? 'logo-blackout.png' // Se for null, injeta a imagem padrão
             );
     }
 

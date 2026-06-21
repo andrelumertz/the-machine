@@ -20,7 +20,7 @@ class Produto
         string $nome, 
         string $descricao, 
         float $preco, 
-        string $imagem= "logo-serenatto.png")
+        ?string $imagem= "logo-serenatto.png")
     {
         $this->id = $id;
         $this->tipo = $tipo;
