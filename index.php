@@ -463,12 +463,7 @@ $dadosAlmoco = $produtosRepositorio->opcoesAlmoco();
     <!-- ===================================================== -->
     <section id="assistente" class="assistente-section scroll-mt-24 py-24">
         <div class="container mx-auto px-6">
-
             <div class="max-w-2xl mx-auto text-center mb-12">
-                <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/25 text-amber-400 text-xs font-semibold tracking-wider uppercase mb-5">
-                    <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span>
-                    Powered by IA &amp; RAG
-                </span>
                 <h2 class="text-3xl md:text-5xl font-extrabold text-white tracking-tight font-barlow leading-[1.1] mb-4">
                     Converse com a <span class="text-amber-400">Blackout</span>
                 </h2>
