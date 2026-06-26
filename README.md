@@ -1,4 +1,4 @@
-# ☕ The Machine — Blackout Coffee Management System & AI
+# ☕ The Machine — Blackout Gerenciamento de Sistema & IA
 
 > **Trabalho de Conclusão de Curso (TCC)**
 > Curso: Análise e Desenvolvimento de Sistemas (ADS)
